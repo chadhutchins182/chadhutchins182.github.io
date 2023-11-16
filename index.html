@@ -22,8 +22,6 @@
         }
 
         header {
-            background-color: #0d1117;
-            color: #c9d1d9;
             padding: 20px 0;
             text-align: center;
         }
@@ -31,6 +29,18 @@
         .header-content {
             max-width: 800px;
             margin: 0 auto;
+            color: #333;
+            /* Dark text for visibility against light background */
+        }
+
+        .header-content h1 {
+            font-size: 2.5em;
+            /* Larger text */
+        }
+
+        .header-content small {
+            font-size: 1.2em;
+            /* Larger text */
         }
 
         h1,
@@ -44,12 +54,15 @@
         }
 
         section {
-            background-color: #161b22;
+            background-color: rgba(22, 27, 34, 0.8);
+            /* 80% opacity */
             margin: 10px;
             padding: 20px;
             border-radius: 10px;
             flex: 1 1 200px;
             box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            /* Fuzzy effect */
         }
 
         .full-width {
@@ -62,6 +75,45 @@
             flex-wrap: wrap;
             justify-content: space-around;
             padding: 20px;
+        }
+
+        #github-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        #github-stats div {
+            background: #1f6feb;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .links-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .links-section ul li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #1f6feb;
+            border-radius: 5px;
+        }
+
+        .links-section ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+
+        .links-section ul li a i {
+            margin-right: 10px;
         }
 
         @media (max-width: 600px) {
@@ -89,7 +141,7 @@
             <p>I'm a research meteorologist at the U.S. Naval Research Laboratory's Marine Meteorology Divsion, Decision Systems Section. In addition to my tactical systems research, I am the
                 R&DSecOps and GitHub Enterprise Server Administrator.</p>
             <br>
-            <h3>Things I use</h3>
+            <h3>Things I know and use</h3>
             <p align="center">
                 <a href="https://skillicons.dev">
                     <img
@@ -107,7 +159,7 @@
             <div id="github-stats"></div>
         </section>
 
-        <section>
+        <section class="links-section">
             <h2>Links</h2>
             <ul>
                 <li>
@@ -150,9 +202,30 @@
         .then(data => {
             const statsDiv = document.getElementById('github-stats');
             statsDiv.innerHTML = `
-                <p>Public Repos: ${data.public_repos}</p>
-                <p>Followers: ${data.followers}</p>
-                <p>Following: ${data.following}</p>
+                <div>
+                    <h3>Public Repos</h3>
+                    <p>${data.public_repos}</p>
+                </div>
+                <div>
+                    <h3>Followers</h3>
+                    <p>${data.followers}</p>
+                </div>
+                <div>
+                    <h3>Following</h3>
+                    <p>${data.following}</p>
+                </div>
+                <div>
+                    <h3>Bio</h3>
+                    <p>${data.bio || 'No bio available'}</p>
+                </div>
+                <div>
+                    <h3>Location</h3>
+                    <p>${data.location || 'No location available'}</p>
+                </div>
+                <div>
+                    <h3>Joined GitHub on</h3>
+                    <p>${new Date(data.created_at).toLocaleDateString()}</p>
+                </div>
             `;
         })
         .catch(error => console.error('Error:', error));
@@ -164,9 +237,25 @@
             data.forEach(repo => {
                 const listItem = document.createElement('li');
                 const link = document.createElement('a');
+                const img = document.createElement('img');
+                const description = document.createElement('p');
+                const language = document.createElement('p');
+
                 link.href = repo.html_url;
                 link.textContent = repo.name;
+
+                img.src = repo.owner.avatar_url;
+                img.style.width = '50px';
+                img.style.height = '50px';
+
+                description.textContent = repo.description || 'No description available';
+                language.textContent = `Language: ${repo.language || 'Not specified'}`;
+
+                listItem.appendChild(img);
                 listItem.appendChild(link);
+                listItem.appendChild(description);
+                listItem.appendChild(language);
+
                 list.appendChild(listItem);
             });
         })
