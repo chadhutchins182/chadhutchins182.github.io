@@ -20,10 +20,12 @@
         a {
             color: #58a6ff;
         }
-
         header {
-            padding: 20px 0;
+            padding: 20px 100px;
             text-align: center;
+            background-color: rgba(0, 0, 0, 0.8); /* Adjust the opacity here */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         .header-content {
@@ -116,6 +118,12 @@
             margin-right: 10px;
         }
 
+        #collapsibleList.collapsed {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+
         @media (max-width: 600px) {
             body {
                 flex-direction: column;
@@ -175,13 +183,15 @@
             </ul>
         </section>
         <section>
-            <h2>Lists of Useful Software</h2>
-            <!-- You can list your projects here -->
-            <section>
-                <ul id="starred-repos">
-                    <!-- Starred repositories will be inserted here -->
-                </ul>
-            </section>
+            <h2>Lists of Useful Software <button id="toggleButton">Show/Hide</button></h2>
+            <div id="collapsibleList">
+                <!-- You can list your projects here -->
+                <section>
+                    <ul id="starred-repos">
+                        <!-- Starred repositories will be inserted here -->
+                    </ul>
+                </section>
+            </div>
         </section>
     </div>
     <footer>
@@ -260,6 +270,10 @@
             });
         })
         .catch(error => console.error('Error:', error));
+
+        document.getElementById('toggleButton').addEventListener('click', function() {
+            document.getElementById('collapsibleList').classList.toggle('collapsed');
+        });
 </script>
 
 
