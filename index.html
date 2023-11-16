@@ -44,7 +44,8 @@
 
         .header-content small {
             font-size: 1.2em;
-            /* Larger text */
+            color: #1f6feb;
+            /* Change this to the color you want */
         }
 
         h1,
@@ -120,10 +121,9 @@
             margin-right: 10px;
         }
 
-        #collapsibleList.collapsed {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
+        .highlighted {
+            background-color: #f0f0f0;
+            /* Change this to the light color you want */
         }
 
         @media (max-width: 600px) {
@@ -161,7 +161,7 @@
         </section>
         <section>
             <h2>GitHub Certification</h2>
-            <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="739dba90-b70d-4e28-b838-0dacd1325f47" data-share-badge-host="https://www.credly.com"></div>
+            <div class="highlighted" data-iframe-width="150" data-iframe-height="270" data-share-badge-id="739dba90-b70d-4e28-b838-0dacd1325f47" data-share-badge-host="https://www.credly.com"></div>
             <script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
         </section>
         <section>
@@ -185,15 +185,10 @@
             </ul>
         </section>
         <section>
-            <h2>Lists of Useful Software <button id="toggleButton">Show/Hide</button></h2>
-            <div id="collapsibleList">
-                <!-- You can list your projects here -->
-                <section>
-                    <ul id="starred-repos">
-                        <!-- Starred repositories will be inserted here -->
-                    </ul>
-                </section>
-            </div>
+            <h2>Lists of Useful Software</h2>
+            <ul id="starred-repos">
+                <!-- Starred repositories will be inserted here -->
+            </ul>
         </section>
     </div>
     <footer>
@@ -245,7 +240,7 @@
         })
         .catch(error => console.error('Error:', error));
 
-    fetch(`https://api.github.com/users/${githubUsername}/starred`)
+    fetch(`https://api.github.com/users/${githubUsername}/starred?per_page=5`)
         .then(response => response.json())
         .then(data => {
             const list = document.getElementById('starred-repos');
@@ -273,12 +268,15 @@
 
                 list.appendChild(listItem);
             });
+
+            // Add a link to the full list of starred repositories
+            const fullListLink = document.createElement('a');
+            fullListLink.href = `https://github.com/${githubUsername}?tab=stars`;
+            fullListLink.textContent = 'See all starred repositories';
+            list.appendChild(fullListLink);
         })
         .catch(error => console.error('Error:', error));
 
-    document.getElementById('toggleButton').addEventListener('click', function () {
-        document.getElementById('collapsibleList').classList.toggle('collapsed');
-    });
 </script>
 
 
